@@ -1,3 +1,3 @@
 # Hyperalignment Benchmarks
 
-Our goals for brainhack are [here](Goals.md).
+Our goals for brainhack are [here](GOALS.md).
