@@ -10,16 +10,16 @@ def intersubject_correlation(dss, reference_ds=0):
     from itertools import combinations
 
     ds_shape = dss[reference_ds].shape
-    n_voxels = ds_shape[1]
+    n_features = ds_shape[1]
 
     for ds in dss: assert ds.shape == ds_shape
 
     correlations = []
     for pair in combinations(dss, 2):
         pair_map = []
-        for voxel in xrange(n_voxels):
-            pair_map.append(mv.pearson_correlation(pair[0].samples[:, voxel],
-                                                   pair[1].samples[:, voxel]))
+        for feature in xrange(n_features):
+            pair_map.append(mv.pearson_correlation(pair[0].samples[:, feature],
+                                                   pair[1].samples[:, feature]))
         correlations.append(pair_map)
 
     correlations_ds = mv.Dataset(correlations,
@@ -28,6 +28,6 @@ def intersubject_correlation(dss, reference_ds=0):
     correlations_ds.sa['pairs'] = list(combinations(range(len(dss)), 2))
 
     assert correlations_ds.shape[0] == len(dss) * (len(dss) - 1) / 2
-    assert correlations_ds.shape[1] == n_voxels
+    assert correlations_ds.shape[1] == n_features
 
     return correlations_ds
