@@ -19,8 +19,10 @@ def parse_args():
 
     parser.add_argument('infiles', nargs='+',
                         help='Input files to run the hyperalignment benchmark')
-    parser.add_argument('--zscore', '-z', action='store_true',
-                        help='Whether to z-score data before running hpal')
+    parser.add_argument('--normalization', '-n',
+                        choices=('zscore', 'percent_signal_change'),
+                        default='zscore',
+                        help='What kind of normalization step to apply')
     # TODO
     return parser.parse_args()
 
