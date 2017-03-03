@@ -35,3 +35,29 @@ def main():
 
 if __name__ == '__main__':
     main()
+    
+def get_data_split(data):
+    """
+    Function to split data into half
+    
+    Parameters
+    ----------
+    data : typical hyperalignment input dataset 
+    
+    Returns
+    -------
+    ds_train : training data
+    ds_test : test data
+    """
+    from __future__ import division
+
+    nruns = set(data[0].sa.chunks)
+    nruns = len(nruns)
+    split_num = nruns/2
+
+    for test_run in range(nruns):
+        # split in training and testing set
+        ds_train = [sd[sd.sa.chunks <= split_num, :] for sd in ds_all]
+        ds_test = [sd[sd.sa.chunks > split_num, :] for sd in ds_all]
+    
+    return ds_train, ds_test
