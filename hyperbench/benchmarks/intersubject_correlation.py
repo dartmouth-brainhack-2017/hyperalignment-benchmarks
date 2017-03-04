@@ -1,4 +1,4 @@
-import numpy as np
+from itertools import combinations
 from mvpa2.measures.corrcoef import pearson_correlation
 from mvpa2.datasets import Dataset
 
@@ -12,15 +12,15 @@ def intersubject_correlation(dss, reference_ds=0):
     reference data set [Default: first data set in list].
     """
 
-    from itertools import combinations
-
-    dss = [Dataset(ds) for ds in dss if type(ds) == np.ndarray]
+    # Check if input list contains Datasets, ndarrays
+    dss = [Dataset(ds) if not type(ds) == Dataset else ds for ds in dss]
 
     ds_shape = dss[reference_ds].shape
     n_features = ds_shape[1]
 
     for ds in dss: assert ds.shape == ds_shape
 
+    # Compute time series correlation per voxel per subject pair
     correlations = []
     for pair in combinations(dss, 2):
         pair_map = []
@@ -29,6 +29,7 @@ def intersubject_correlation(dss, reference_ds=0):
                                                    pair[1].samples[:, feature]))
         correlations.append(pair_map)
 
+    # Resulting correlation map inherits attributes of referece data set
     correlations_ds = Dataset(correlations,
                                  fa=dss[reference_ds].fa,
                                  a=dss[reference_ds].a)
