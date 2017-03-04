@@ -13,6 +13,8 @@ def intersubject_correlation(dss, reference_ds=0):
 
     from itertools import combinations
 
+    dss = [mv.Dataset(ds) for ds in dss if type(ds) == np.ndarray]
+
     ds_shape = dss[reference_ds].shape
     n_features = ds_shape[1]
 
