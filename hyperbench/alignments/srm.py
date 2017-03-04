@@ -1,7 +1,7 @@
 from __future__ import absolute_import
-import sys
-sys.path.append('../3rd')
-from srm import SRM
+from hyperbench.dataio.hdf5_data import load_data, save_data
+from hyperbench.extenals.srm import SRM
+
 
 def srm_alignment(input_data, nfeatures, output_data, mask, output_suffix, training_runs,
                    testing_runs, **kwargs):
@@ -27,8 +27,9 @@ def srm_alignment(input_data, nfeatures, output_data, mask, output_suffix, train
     dss_test = load_data(input_data, testing_runs) #, mask)
     # Prepare data for SRM
     # SRM expects numpy arrays
-    dss_train = [sd.samples for sd in dss_train]
-    dss_test = [sd.samples for sd in dss_test]
+    # and data as featuresXsamples
+    dss_train = [sd.samples.T for sd in dss_train]
+    dss_test = [sd.samples.T for sd in dss_test]
 
     # Initialize SRM
     srm = SRM(features=nfeatures, **kwargs)
@@ -39,6 +40,8 @@ def srm_alignment(input_data, nfeatures, output_data, mask, output_suffix, train
     for split, dss in (('train', dss_train),
                        ('test', dss_test)):
         dss_hyper = srm.transform(dss)
+        # To transpose data to samplesXfeatures
+        dss_hyper = [sd.T for sd in dss_hyper]
         if output_data is not None:
             save_data(dss_hyper, output_suffix+split)
         dss_aligned[split] = dss_hyper
