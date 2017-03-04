@@ -1,3 +1,7 @@
+from mvpa2.measures.corrcoef import pearson_correlation
+from mvpa2.datasets import Dataset
+
+
 def intersubject_correlation(dss, reference_ds=0):
     """
     Computes voxelwise inter-subject time series correlation
@@ -6,7 +10,7 @@ def intersubject_correlation(dss, reference_ds=0):
     correlations will inherit Dataset attributes from
     reference data set [Default: first data set in list].
     """
-    from mvpa2.measures.corrcoef import pearson_correlation
+
     from itertools import combinations
 
     ds_shape = dss[reference_ds].shape
@@ -18,11 +22,11 @@ def intersubject_correlation(dss, reference_ds=0):
     for pair in combinations(dss, 2):
         pair_map = []
         for feature in xrange(n_features):
-            pair_map.append(mv.pearson_correlation(pair[0].samples[:, feature],
+            pair_map.append(pearson_correlation(pair[0].samples[:, feature],
                                                    pair[1].samples[:, feature]))
         correlations.append(pair_map)
 
-    correlations_ds = mv.Dataset(correlations,
+    correlations_ds = Dataset(correlations,
                                  fa=dss[reference_ds].fa,
                                  a=dss[reference_ds].a)
     correlations_ds.sa['pairs'] = list(combinations(range(len(dss)), 2))
