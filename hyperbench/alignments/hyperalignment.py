@@ -1,5 +1,5 @@
 from mvpa2.algorithms.hyperalignment import Hyperalignment
-from dataio.hdf5_data import load_data, save_data
+from hyperbench.dataio.hdf5_data import load_data, save_data
 
 def hyperalignment(input_data, output_data, mask, output_suffix, training_runs,
                    testing_runs, **kwargs):
