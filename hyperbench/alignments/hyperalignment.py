@@ -1,8 +1,10 @@
 from mvpa2.algorithms.hyperalignment import Hyperalignment
 from hyperbench.dataio.hdf5_data import load_data, save_data
+from hyperbench.normalize import normalize
+
 
 def hyperalignment(input_data, output_data, mask, output_suffix, training_runs,
-                   testing_runs, **kwargs):
+                   testing_runs, normalization, **kwargs):
     """
 
     Parameters
@@ -22,6 +24,10 @@ def hyperalignment(input_data, output_data, mask, output_suffix, training_runs,
     # XXX TODO Use mask to load from nifti file
     dss_train = load_data(input_data, training_runs) #, mask)
     dss_test = load_data(input_data, testing_runs) #, mask)
+    # Normalize/pre-process data here
+    dss_train = normalize(dss_train, norm_type=normalization)
+    dss_test = normalize(dss_test, norm_type=normalization)
+
     # Initialize hyperalignment
     ha = Hyperalignment(**kwargs)
     # Run hyperalignment on training data

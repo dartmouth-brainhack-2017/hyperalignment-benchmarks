@@ -19,6 +19,8 @@ def parse_args():
 
     parser.add_argument('infiles', nargs='+',
                         help='Input files to run the hyperalignment benchmark')
+    parser.add_argument('outfiles', nargs='+',
+                        help='Output prefix to save the hyperaligned data')
     parser.add_argument('--normalization', '-n',
                         choices=('zscore', 'percent_signal_change'),
                         default='zscore',
@@ -30,6 +32,7 @@ def parse_args():
 def main():
     """Run the beast"""
     args = parse_args()
+
     pass
 
 
