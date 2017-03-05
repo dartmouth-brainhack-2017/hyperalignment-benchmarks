@@ -14,7 +14,7 @@ import numpy as np
 
 from mvpa2.base.dochelpers import _str, borrowkwargs, _repr_attrs
 from mvpa2.mappers.zscore import ZScoreMapper
-
+from mvpa2.datasets import Dataset
 
 @borrowkwargs(ZScoreMapper, '__init__')
 class PSCMapper(ZScoreMapper):
