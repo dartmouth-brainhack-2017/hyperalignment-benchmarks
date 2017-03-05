@@ -29,11 +29,13 @@ def load_data(data_path, runs=None):
         dss = [sd.select(sadict={'chunks': runs}) for sd in dss]
         return dss
 
-def save_data():
+def save_data(data, save_path):
     """
 
     Returns
     -------
 
     """
-    pass
+    if os.path.exists(save_path):
+        raise Warning("File % already exists.\nOverwriting.".format(save_path))
+    h5save(save_path, data)
