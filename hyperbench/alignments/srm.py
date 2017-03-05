@@ -1,10 +1,11 @@
 from __future__ import absolute_import
 from hyperbench.dataio.hdf5_data import load_data, save_data
 from hyperbench.extenals.srm import SRM
+from hyperbench.normalize import normalize
 
 
 def srm_alignment(input_data, nfeatures, output_data, mask, output_suffix, training_runs,
-                   testing_runs, **kwargs):
+                   testing_runs, normalization, **kwargs):
     """
 
     Parameters
@@ -26,11 +27,13 @@ def srm_alignment(input_data, nfeatures, output_data, mask, output_suffix, train
     dss_train = load_data(input_data, training_runs) #, mask)
     dss_test = load_data(input_data, testing_runs) #, mask)
     # Prepare data for SRM
+    # Normalize/pre-process data here
+    dss_train = normalize(dss_train, norm_type=normalization)
+    dss_test = normalize(dss_test, norm_type=normalization)
     # SRM expects numpy arrays
     # and data as featuresXsamples
     dss_train = [sd.samples.T for sd in dss_train]
     dss_test = [sd.samples.T for sd in dss_test]
-
     # Initialize SRM
     srm = SRM(features=nfeatures, **kwargs)
     # Run hyperalignment on training data
