@@ -14,9 +14,10 @@ def test_basics(alignment, normalization, benchmark):
     # Smoke tests for now
     if alignment == 'hyper':
         dss_aligned = hyperalignment(data_path, None, None, None, range(4),
-                                     range(5, 8), normalization=normalization)
+                                     range(5, 8), normalization=normalization,
+                                     output_dim=None)
     elif alignment == 'srm':
-        dss_aligned = srm_alignment(data_path, 25, None, None, None, range(4),
+        dss_aligned = srm_alignment(data_path, 20, None, None, None, range(4),
                                      range(5, 8), normalization=normalization)
     else:
         pass
@@ -24,10 +25,10 @@ def test_basics(alignment, normalization, benchmark):
     if benchmark == 'isc':
         corrs_train = intersubject_correlation(dss_aligned['train'])
         corrs_test = intersubject_correlation(dss_aligned['test'])
-        print("Training mean ({0}):{1}".format(alignment, corrs_train.samples.mean()))
-        print("Test mean ({0}):{1}".format(alignment, corrs_test.samples.mean()))
+        print("Training mean ({0}):{1}\n".format(alignment, corrs_train.samples.mean()))
+        print("Test mean ({0}):{1}\n".format(alignment, corrs_test.samples.mean()))
     elif benchmark == 'clf':
         errors_train = timesegments_classification(dss_aligned['train'], do_zscore=True)
         errors_test = timesegments_classification(dss_aligned['test'], do_zscore=True)
-        print("Training error ({0}:{1}".format(alignment, errors_train.mean()))
-        print("Test error ({0}):{1}".format(alignment, errors_test.mean()))
+        print("Training error ({0}:{1}\n".format(alignment, errors_train.mean()))
+        print("Test error ({0}):{1}\n".format(alignment, errors_test.mean()))
